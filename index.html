@@ -2,7 +2,7 @@
 <html lang="fa">
 <head> 
     <meta charset="UTF-8">
-    <title >ماشین حساب من</title>
+    <title>ماشین حساب من</title>
     <style>
         #display {
             font-size: 40px;
@@ -41,36 +41,63 @@
 
 <script>
     const display = document.querySelector("#display");
-    const numButtons = document.querySelectorAll(".btn-num")
+    const numButtons = document.querySelectorAll(".btn-num");
     
     let firstNumber = null;
     let operator = null;
 
+    // ۱. هندل کردن دکمه‌های عددی (با کد دفاعی علیه error و NaN)
     numButtons.forEach(function(button) {
         button.addEventListener("click", function() {
-        
+            if (display.textContent === "0" || display.textContent === "error" || display.textContent === "NaN") {
+                display.textContent = button.textContent;
+            } else {
+                display.textContent += button.textContent;
+            }    
+        });
+    });
 
-        if (display.textContent === "0") {
-            display.textContent = button.textContent;
-        }     
-    else {
-        display.textContent += button.textContent;
-    }    
-    });
-    });
+    // ۲. دکمه پاک کردن (Clear)
     const clearBtn = document.querySelector("#clear-btn");
-
     clearBtn.addEventListener("click", function(){
         display.textContent = "0";
         firstNumber = null;
         operator = null;
     });
+
+    // ۳. عملگر جمع
     const plusBtn = document.querySelector(".btn-plus");
     plusBtn.addEventListener("click", function(){
-    firstNumber = Number(display.textContent)
-    operator = "+";
-    display.textContent= "0"; 
+        firstNumber = Number(display.textContent);
+        operator = "+";
+        display.textContent = "0"; 
     });
+
+    // ۴. عملگر تفریق
+    const minusBtn = document.querySelector(".btn-minus");
+    minusBtn.addEventListener("click", function(){
+        firstNumber = Number(display.textContent);
+        operator = "-";
+        display.textContent = "0"; 
+    });
+
+    // ۵. عملگر ضرب
+    const multiplyBtn = document.querySelector(".btn-multi");
+    multiplyBtn.addEventListener("click", function(){
+        firstNumber = Number(display.textContent);
+        operator = "*";
+        display.textContent = "0";
+    });
+
+    // ۶. عملگر تقسیم
+    const divideBtn = document.querySelector(".btn-divide");
+    divideBtn.addEventListener("click", function(){
+        firstNumber = Number(display.textContent);
+        operator = "/";
+        display.textContent = "0";
+    });
+
+    // ۷. دکمه مساوی (=)
     const assignBtn = document.querySelector(".btn-assign");
     assignBtn.addEventListener("click", function(){
         const secondNumber = Number(display.textContent);
@@ -84,65 +111,38 @@
             display.textContent = firstNumber * secondNumber;
         }
         else if (operator === "/"){
-         if(secondNumber === 0 ){
-                display.textContent = "error"
-            } 
-            else { display.textContent = firstNumber / secondNumber;
+            if (secondNumber === 0){
+                display.textContent = "error";
+            } else { 
+                display.textContent = firstNumber / secondNumber;
             }
         }
-       
     });
-    const minusBtn = document.querySelector(".btn-minus");
-    minusBtn.addEventListener("click", function(){
-        firstNumber = Number(display.textContent);
-        operator = "-";
-        display.textContent = "0"; 
-    });
-    const multiplyBtn = document.querySelector(".btn-multi")
-    multiplyBtn.addEventListener("click", function(){
-      firstNumber = Number(display.textContent)
-      operator ="*"
-      display.textContent = "0";
 
-    });
-    const divideBtn = document.querySelector(".btn-divide")
-    divideBtn.addEventListener("click", function(){
-        firstNumber = Number(display.textContent)
-        operator = "/"
-        display.textContent = "0";
-    });
-    const backspaceBtn = document.querySelector(".btn-backspace")
+    // ۸. دکمه بک‌استیس
+    const backspaceBtn = document.querySelector(".btn-backspace");
     backspaceBtn.addEventListener("click", function(){
-        if (display.textContent.length > 1){
+        if (display.textContent.length > 1 && display.textContent !== "error" && display.textContent !== "NaN"){
             display.textContent = display.textContent.slice(0, -1);
-        }
-        else {
+        } else {
             display.textContent = "0";
         }
-
     });
+
+    // ۹. دکمه اعشار (.)
     const decimalBtn = document.querySelector(".btn-decimal");
     decimalBtn.addEventListener("click", function(){
+        if (!display.textContent.includes(".")){
+            display.textContent += ".";
+        } 
+    });
 
-       if (!display.textContent.includes(".")){
-        display.textContent += ".";
-       } 
-    });
-    numButtons.forEach(function(button) {
-    button.addEventListener("click", function() {
-        if (display.textContent === "0" || display.textContent === "error" || display.textContent === "NaN") {
-            display.textContent = button.textContent;
-        } else {
-            display.textContent += button.textContent;
-        }    
-    });
-});
-    //keydown
-    document.addEventListener("keydown" ,function(event){
+    // ۱۰. رویدادهای کیبورد (Keyboard Support)
+    document.addEventListener("keydown", function(event){
         const key = event.key;
 
         if (key >= "0" && key <= "9"){
-            if (display.textContent === "0"){
+            if (display.textContent === "0" || display.textContent === "error" || display.textContent === "NaN"){
                 display.textContent = key;
             } else {
                 display.textContent += key;
@@ -152,7 +152,7 @@
         if (key === "-") minusBtn.click();
         if (key === "*") multiplyBtn.click();
         if (key === "/") divideBtn.click();
-        if(key === ".") decimalBtn.click();
+        if (key === ".") decimalBtn.click();
         if (key === "Enter" || key === "="){
             assignBtn.click();
         }
@@ -163,14 +163,6 @@
             clearBtn.click();
         }
     });
-    if (key >= "0" && key <= "9"){
-    if (display.textContent === "0" || display.textContent === "error" || display.textContent === "NaN"){
-        display.textContent = key;
-    } else {
-        display.textContent += key;
-    }
-}
 </script>
 </body>
-
 </html>
