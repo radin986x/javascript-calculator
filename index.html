@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head> 
+    <meta charset="UTF-8">
+    <title >ماشین حساب من</title>
+    <style>
+        #display {
+            font-size: 40px;
+            background-color: #eee;
+            padding: 10px;
+            width: 200px;
+            text-align: right;
+        }
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1 id="display">0</h1>
+<button class="btn-num">0</button>
+<button class="btn-num">1</button>
+<button class="btn-num">2</button>
+<button class="btn-num">3</button>
+<button class="btn-num">4</button>
+<button class="btn-num">5</button>
+<button class="btn-num">6</button>
+<button class="btn-num">7</button>
+<button class="btn-num">8</button>
+<button class="btn-num">9</button>
+<button id="clear-btn">C</button>
+<button class="btn-minus">-</button>
+<button class="btn-plus">+</button>
+<button class="btn-assign">=</button>
+<button class="btn-multi">*</button>
+<button class="btn-divide">/</button>
+<button class="btn-decimal">.</button>
+<button class="btn-backspace">⌫</button>
+
+<script>
+    const display = document.querySelector("#display");
+    const numButtons = document.querySelectorAll(".btn-num")
+    
+    let firstNumber = null;
+    let operator = null;
+
+    numButtons.forEach(function(button) {
+        button.addEventListener("click", function() {
+        
+
+        if (display.textContent === "0") {
+            display.textContent = button.textContent;
+        }     
+    else {
+        display.textContent += button.textContent;
+    }    
+    });
+    });
+    const clearBtn = document.querySelector("#clear-btn");
+
+    clearBtn.addEventListener("click", function(){
+        display.textContent = "0";
+        firstNumber = null;
+        operator = null;
+    });
+    const plusBtn = document.querySelector(".btn-plus");
+    plusBtn.addEventListener("click", function(){
+    firstNumber = Number(display.textContent)
+    operator = "+";
+    display.textContent= "0"; 
+    });
+    const assignBtn = document.querySelector(".btn-assign");
+    assignBtn.addEventListener("click", function(){
+        const secondNumber = Number(display.textContent);
+        if (operator === "+"){
+            display.textContent = firstNumber + secondNumber;     
+        }
+        else if (operator === "-"){
+            display.textContent = firstNumber - secondNumber;
+        }
+        else if (operator === "*"){
+            display.textContent = firstNumber * secondNumber;
+        }
+        else if (operator === "/"){
+         if(secondNumber === 0 ){
+                display.textContent = "error"
+            } 
+            else { display.textContent = firstNumber / secondNumber;
+            }
+        }
+       
+    });
+    const minusBtn = document.querySelector(".btn-minus");
+    minusBtn.addEventListener("click", function(){
+        firstNumber = Number(display.textContent);
+        operator = "-";
+        display.textContent = "0"; 
+    });
+    const multiplyBtn = document.querySelector(".btn-multi")
+    multiplyBtn.addEventListener("click", function(){
+      firstNumber = Number(display.textContent)
+      operator ="*"
+      display.textContent = "0";
+
+    });
+    const divideBtn = document.querySelector(".btn-divide")
+    divideBtn.addEventListener("click", function(){
+        firstNumber = Number(display.textContent)
+        operator = "/"
+        display.textContent = "0";
+    });
+    const backspaceBtn = document.querySelector(".btn-backspace")
+    backspaceBtn.addEventListener("click", function(){
+        if (display.textContent.length > 1){
+            display.textContent = display.textContent.slice(0, -1);
+        }
+        else {
+            display.textContent = "0";
+        }
+
+    });
+    const decimalBtn = document.querySelector(".btn-decimal");
+    decimalBtn.addEventListener("click", function(){
+
+       if (!display.textContent.includes(".")){
+        display.textContent += ".";
+       } 
+    });
+    //keydown
+    document.addEventListener("keydown" ,function(event){
+        const key = event.key;
+
+        if (key >= "0" && key <= "9"){
+            if (display.textContent === "0"){
+                display.textContent = key;
+            } else {
+                display.textContent += key;
+            }
+        }
+        if (key === "+") plusBtn.click();
+        if (key === "-") minusBtn.click();
+        if (key === "*") multiplyBtn.click();
+        if (key === "/") divideBtn.click();
+        if(key === ".") decimalBtn.click();
+        if (key === "Enter" || key === "="){
+            assignBtn.click();
+        }
+        if (key === "Backspace"){
+            backspaceBtn.click();
+        }
+        if (key.toLowerCase() === "c" || key === "Escape"){
+            clearBtn.click();
+        }
+    });
+</script>
+</body>
+
+</html>
