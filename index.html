@@ -128,6 +128,15 @@
         display.textContent += ".";
        } 
     });
+    numButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
+        if (display.textContent === "0" || display.textContent === "error" || display.textContent === "NaN") {
+            display.textContent = button.textContent;
+        } else {
+            display.textContent += button.textContent;
+        }    
+    });
+});
     //keydown
     document.addEventListener("keydown" ,function(event){
         const key = event.key;
@@ -154,6 +163,13 @@
             clearBtn.click();
         }
     });
+    if (key >= "0" && key <= "9"){
+    if (display.textContent === "0" || display.textContent === "error" || display.textContent === "NaN"){
+        display.textContent = key;
+    } else {
+        display.textContent += key;
+    }
+}
 </script>
 </body>
 
